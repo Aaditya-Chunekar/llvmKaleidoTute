@@ -19,7 +19,7 @@ static int gettok()
 {
     static int lastCh=' ';
 
-    while(isspacce(lastCh)) lastCh=getchar();
+    while(isspace(lastCh)) lastCh=getchar();
 
     if(isalpha(lastCh))
     {
@@ -27,7 +27,7 @@ static int gettok()
         while(isalnum((lastCh=getchar()))) identStr+=lastCh;
         //why the double bracket? - for precedence
         if(identStr=="def") return tok_def;
-        if(identStr="extern") return tok_extern;
+        if(identStr=="extern") return tok_extern;
         return tok_ident;
     }
 
