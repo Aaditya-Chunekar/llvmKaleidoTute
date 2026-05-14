@@ -47,7 +47,7 @@ class callExprAST : public exprAST
         callExprAST
         (
             const string &callee,
-            vector<unique_ptr<ExprAST>> args
+            vector<unique_ptr<exprAST>> args
         ) : callee(callee), args(move(args)) {}
 };
 
@@ -57,6 +57,15 @@ class protoAST
     vector<string> args;
     public:
         protoAST (const string &name, vector<string> args)
-        : name(name), args(move(args)) {}
+            : name(name), args(move(args)) {}
         const string &getName() const {return name;}
+};
+
+class funcAST
+{
+    unique_ptr<protoAST> proto;
+    unique_ptr<exprAST> body;
+    public:
+        funcAST(unique_ptr<protoAST> proto, unique_ptr<exprAST> body)
+            : proto(move(proto)), body(move(body)) {}
 };
