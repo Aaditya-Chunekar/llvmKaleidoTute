@@ -1,3 +1,4 @@
+using namespace std;
 /// Definitions
 enum Token
 {
@@ -11,7 +12,7 @@ enum Token
     tok_ident=-4,
     tok_num=-5,
 };
-static std::string identStr;
+static string identStr;
 static double numVal;
 
 /// gettok() - return next tok from std ip
@@ -33,7 +34,7 @@ static int gettok()
 
     if(isdigit(lastCh) || lastCh=='.')
     {
-        std::string numStr ;
+        string numStr ;
         do  
         {
             numStr+=lastCh;

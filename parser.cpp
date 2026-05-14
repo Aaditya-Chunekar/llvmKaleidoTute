@@ -1,4 +1,4 @@
-//kaleidoscope - expr, proto & funcObj
+using namespace std;
 class exprAST
 {
     public:
@@ -17,36 +17,46 @@ class numExprAST : public exprAST
 
 class varExprAST : public exprAST 
 {
-    std::string name;
+    string name;
     public:
-        varExprAST(const std::string &name) : name(name) {}
+        varExprAST(const string &name) : name(name) {}
 };
 
 class binExprAST : public exprAST
 {
     char op;
     //below line is imp
-    std::unique_ptr<exprAST> LHS,RHS;
+    unique_ptr<exprAST> LHS,RHS;
     public:
         //
         binExprAST
         (
             char op,
-            std::unique_ptr<exprAST> LHS,
-            std::unique_ptr<exprAST> RHS
-        ) : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
+            unique_ptr<exprAST> LHS,
+            unique_ptr<exprAST> RHS
+        ) : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
         //
         //what does move do?
 };
 
 class callExprAST : public exprAST
 {
-    std::string callee;
-    std::vector<std::unique_ptr<exprAST>> args;
+    string callee;
+    vector<unique_ptr<exprAST>> args;
     public:
         callExprAST
         (
-            const std::string &callee,
-            std::vector<std::unique_ptr<ExprAST>> args
-        ) : callee(callee), args(std::move(args)) {}
+            const string &callee,
+            vector<unique_ptr<ExprAST>> args
+        ) : callee(callee), args(move(args)) {}
+};
+
+class protoAST
+{
+    string name;
+    vector<string> args;
+    public:
+        protoAST (const string &name, vector<string> args)
+        : name(name), args(move(args)) {}
+        const string &getName() const {return name;}
 };
