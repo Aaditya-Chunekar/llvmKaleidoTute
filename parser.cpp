@@ -69,3 +69,22 @@ class funcAST
         funcAST(unique_ptr<protoAST> proto, unique_ptr<exprAST> body)
             : proto(move(proto)), body(move(body)) {}
 };
+//what is make_unique?
+//todo: adding header files
+//todo: connecting multiple .cpp files
+
+//parser
+static int curTok;
+static int getNextToken()
+{
+    return curTok=getTok();
+    //how to access this func from lexer.cpp
+    //  maybe I need to convert lexer.cpp to lexer.h
+}
+
+unique_ptr<exprAST> logError(const char *str)
+{
+    fprintf(stderr, "Error : %s\n", str);
+    return nullptr;
+}
+
