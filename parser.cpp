@@ -88,3 +88,9 @@ unique_ptr<exprAST> logError(const char *str)
     return nullptr;
 }
 
+unique_ptr<protoAST> logErrorP(const char *str)
+{
+    logError(str);
+    return nullptr;
+}
+
