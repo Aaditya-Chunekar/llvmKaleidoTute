@@ -5,7 +5,7 @@ class exprAST
         virtual ~exprAST()=default;
         //understanding virtual and default
 };
-/* NumberExprAST class captures the numeric value of the literal as an instance variable. 
+/* numExprAST class captures the numeric value of the literal as an instance variable. 
 This allows later phases of the compiler to know what the stored numeric value is. */
 class numExprAST : public exprAST
 {
@@ -94,3 +94,9 @@ unique_ptr<protoAST> logErrorP(const char *str)
     return nullptr;
 }
 
+static unique_ptr<exprAST> parseNumExpr()
+{
+    auto res = make_unique<numExprAST>(numVal);
+    getNextToken(); //consume the num
+    return move(res);
+}
