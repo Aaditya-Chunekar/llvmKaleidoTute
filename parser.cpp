@@ -100,3 +100,14 @@ static unique_ptr<exprAST> parseNumExpr()
     getNextToken(); //consume the num
     return move(res);
 }
+
+static unique_ptr<exprAST> parseParenExpr()
+{
+    getNextToken();
+    auto v = parseExpr();
+    //parseExpr yet to be defined
+    if(!v) return nullptr;
+    if(curTok!=')') return logError("Expected ')'");
+    getNextToken();
+    return v;
+}
