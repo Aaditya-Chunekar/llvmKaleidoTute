@@ -111,3 +111,35 @@ static unique_ptr<exprAST> parseParenExpr()
     getNextToken();
     return v;
 }
+
+static unique_ptr<exprAST> parseIdentExpr()
+{
+    string idName = identStr;
+    //identStr is in lexer.cpp
+    getNextToken(); //eat identifier
+
+    if(curTok!='(')
+    return make_unique<varExprAST>(idName);
+
+    getNextToken(); //eat the '('
+    vector<unique_ptr<exprAST>> args;
+    if(curTok!=')')
+    {
+        while(true)
+        {
+            if(auto arg = parseExpr())
+            args.push_back(move(arg));
+            else return nullptr
+
+            if(curTok==')') break;
+
+            if(curTok!=',') 
+            return logError("Expected ')' or ',' in argument list")
+
+            getNextToken();
+        }
+    }
+    getNextToken();
+    return make_unique<callExprAST>(idName, move(args));
+}
+//eat the ')'
