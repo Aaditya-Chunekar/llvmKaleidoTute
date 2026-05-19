@@ -158,3 +158,23 @@ static unique_ptr<exprAST> parsePrimary()
 
     }
 }
+
+static map<char,int> binOpPrecedence;
+
+static int getTokPrecedence()
+{
+    if(!isascii(curTok)) return -1;
+
+    int tokPrec = binOpPrecedence[curTok];
+    if(tokPrec<=0) return -1;
+
+    return tokPrec;
+}
+
+int main()
+{
+    binOpPrecedence['<']=10;
+    binOpPrecedence['+']=20;
+    binOpPrecedence['-']=20;
+    binOpPrecedence['*']=40;
+}
