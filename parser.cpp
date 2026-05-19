@@ -139,7 +139,22 @@ static unique_ptr<exprAST> parseIdentExpr()
             getNextToken();
         }
     }
-    getNextToken();
+    getNextToken(); //eat the ')'
     return make_unique<callExprAST>(idName, move(args));
 }
-//eat the ')'
+
+static unique_ptr<exprAST> parsePrimary()
+{
+    switch(curTok)
+    {
+        default:
+            return logError("unknown token when expecting an expression");
+        case tok_ident;
+            return parseIdentExpr();
+        case tok_num:
+            return parseNumExpr();
+        case '(':
+            return parseParenExpr();
+
+    }
+}
