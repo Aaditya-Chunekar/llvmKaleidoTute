@@ -178,3 +178,26 @@ int main()
     binOpPrecedence['-']=20;
     binOpPrecedence['*']=40;
 }
+
+static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
+{
+    while(true)
+    {
+        int tokPrec = getTokPrecedence();
+        if(tokPrec<exprPrec)return LHS;
+
+        int binOp = curTok;
+        getNextToken();
+
+        auto RHS = parsePrimary();
+        if(!RHS) return nullptr;
+
+        int nextPrec = getTokPrecedence();
+        if(tokPrec<nextPrec)
+        {
+            RHS=parseBinOpRHS(tokPrec+1, move(RHS));
+            if(!RHS) return nullptr;
+        }
+        LHS=make_unique<binExprAST>(binOp, move(LHS), move(RHS));
+    }
+}
