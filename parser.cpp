@@ -201,3 +201,24 @@ static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
         LHS=make_unique<binExprAST>(binOp, move(LHS), move(RHS));
     }
 }
+
+static unique_ptr<protoAST> parsePrototype()
+{
+    if(curTok!=tok_ident)
+    return logErrorP("Expected function name in prototype");
+
+    string fnName = identStr;
+    getNextToken();
+
+    if(curTok!='(')
+    return logErrorP("Expected '(' in prototype");
+
+    vector<string> argNames;
+    while(getNextToken()==tok_ident)
+    argNames.push_back(identStr);
+    if(curTok!=')')
+    return logErrorP("Expected ')' in prototype");
+
+    getNextToken();
+    return make_unique<protoAST>(fnName, move(argNames));
+}
