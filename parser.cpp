@@ -202,7 +202,7 @@ static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
     }
 }
 
-static unique_ptr<protoAST> parsePrototype()
+static unique_ptr<protoAST> parseProto()
 {
     if(curTok!=tok_ident)
     return logErrorP("Expected function name in prototype");
@@ -221,4 +221,15 @@ static unique_ptr<protoAST> parsePrototype()
 
     getNextToken();
     return make_unique<protoAST>(fnName, move(argNames));
+}
+
+static unique_ptr<funcAST> parseDef()
+{
+    getNextToken();
+    auto proto = parseProto();
+    if(!proto) return nullptr;
+
+    if(auto e = parseExpr())
+    return make_unique<funcAST>(move(proto), move(e));
+    return nullptr;
 }
