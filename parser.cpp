@@ -239,3 +239,13 @@ static unique_ptr<protoAST> parseExtern()
     getNextToken();
     return parseProto();
 }
+
+static unique_ptr<exprAST> parseTopLevelExpr()
+{
+    if(auto e = parseExpr())
+    {
+        auto proto = make_unique<protoAST>("__anon_expr", vector<string>());
+        return make_unique<funcAST>(move(proto), move(e));
+    }
+    return nullptr;
+}
