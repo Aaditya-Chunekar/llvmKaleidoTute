@@ -233,3 +233,9 @@ static unique_ptr<funcAST> parseDef()
     return make_unique<funcAST>(move(proto), move(e));
     return nullptr;
 }
+
+static unique_ptr<protoAST> parseExtern()
+{
+    getNextToken();
+    return parseProto();
+}
