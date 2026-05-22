@@ -249,3 +249,49 @@ static unique_ptr<exprAST> parseTopLevelExpr()
     }
     return nullptr;
 }
+
+static void handleDef()
+{
+    if(parseDef())
+    fprintf(stderr, "Parsed a function definition.\n");
+    else getNextToken();
+}
+
+static void handleExtern()
+{
+    if(parseExtern())
+    fprintf(stderr, "Parsed an extern\n");
+    else getNextToken();
+}
+
+static void handleTopLevelExpr()
+{
+    if(parseTopLevelExpr())
+    fprintf(stderr, "Parsed a top-level expr\n");
+    else getNextToken();
+}
+
+static void mainLoop()
+{
+    while(true)
+    {
+        fprintf(stderr, "ready> ");
+        switch(curTok)
+        {
+            case tok_eof:
+                return;
+            case ';':
+                getNextToken();
+                break;
+            case tok_def:
+                handleDef();
+                break;
+            case tok_extern:
+                handleExtern();
+                break;
+            default:
+                handleTopLevelExpr();
+                break;
+        }
+    }
+}
