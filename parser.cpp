@@ -171,14 +171,6 @@ static int getTokPrecedence()
     return tokPrec;
 }
 
-int main()
-{
-    binOpPrecedence['<']=10;
-    binOpPrecedence['+']=20;
-    binOpPrecedence['-']=20;
-    binOpPrecedence['*']=40;
-}
-
 static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
 {
     while(true)
@@ -294,4 +286,19 @@ static void mainLoop()
                 break;
         }
     }
+}
+
+int main()
+{
+    binOpPrecedence['<']=10;
+    binOpPrecedence['+']=20;
+    binOpPrecedence['-']=20;
+    binOpPrecedence['*']=40;
+
+    fprintf(stderr, "ready> ");
+    getNextToken();
+
+    mainLoop();
+    
+    return 0;
 }
