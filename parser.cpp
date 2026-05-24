@@ -1,3 +1,5 @@
+#include "lexer.h"
+#include <bits/stdc++.h>
 using namespace std;
 class exprAST
 {
@@ -129,12 +131,12 @@ static unique_ptr<exprAST> parseIdentExpr()
         {
             if(auto arg = parseExpr())
             args.push_back(move(arg));
-            else return nullptr
+            else return nullptr;
 
             if(curTok==')') break;
 
             if(curTok!=',') 
-            return logError("Expected ')' or ',' in argument list")
+            return logError("Expected ')' or ',' in argument list");
 
             getNextToken();
         }
@@ -149,7 +151,7 @@ static unique_ptr<exprAST> parsePrimary()
     {
         default:
             return logError("unknown token when expecting an expression");
-        case tok_ident;
+        case tok_ident:
             return parseIdentExpr();
         case tok_num:
             return parseNumExpr();
@@ -193,7 +195,13 @@ static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
         LHS=make_unique<binExprAST>(binOp, move(LHS), move(RHS));
     }
 }
+static std::unique_ptr<ExprAST> ParseExpression() {
+  auto LHS = ParsePrimary();
+  if (!LHS)
+    return nullptr;
 
+  return ParseBinOpRHS(0, std::move(LHS));
+}
 static unique_ptr<protoAST> parseProto()
 {
     if(curTok!=tok_ident)

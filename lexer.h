@@ -1,3 +1,5 @@
+#pragma once
+#include <bits/stdc++.h>
 using namespace std;
 /// Definitions
 enum Token
@@ -12,11 +14,11 @@ enum Token
     tok_ident=-4,
     tok_num=-5,
 };
-static string identStr;
-static double numVal;
+extern static string identStr;
+extern static double numVal;
 
-/// gettok() - return next tok from std ip
-static int gettok()
+/// getTok() - return next tok from std ip
+static int getTok()
 {
     static int lastCh=' ';
 
