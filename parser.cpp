@@ -1,5 +1,9 @@
 #include "lexer.h"
-#include <bits/stdc++.h>
+#include <string>
+#include <memory>
+#include <vector>
+#include <map>
+
 using namespace std;
 class exprAST
 {
@@ -95,7 +99,7 @@ unique_ptr<protoAST> logErrorP(const char *str)
     logError(str);
     return nullptr;
 }
-
+static unique_ptr<exprAST> parseExpr();
 static unique_ptr<exprAST> parseNumExpr()
 {
     auto res = make_unique<numExprAST>(numVal);
@@ -195,12 +199,12 @@ static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
         LHS=make_unique<binExprAST>(binOp, move(LHS), move(RHS));
     }
 }
-static std::unique_ptr<ExprAST> ParseExpr() {
-  auto LHS = ParsePrimary();
+static unique_ptr<exprAST> parseExpr() {
+  auto LHS = parsePrimary();
   if (!LHS)
     return nullptr;
 
-  return ParseBinOpRHS(0, std::move(LHS));
+  return parseBinOpRHS(0, std::move(LHS));
 }
 static unique_ptr<protoAST> parseProto()
 {
@@ -240,7 +244,7 @@ static unique_ptr<protoAST> parseExtern()
     return parseProto();
 }
 
-static unique_ptr<exprAST> parseTopLevelExpr()
+static unique_ptr<funcAST> parseTopLevelExpr()
 {
     if(auto e = parseExpr())
     {
@@ -310,3 +314,5 @@ int main()
     
     return 0;
 }
+
+//expected ; after top level expressions - to avoid ambiguity with function definitions and externs

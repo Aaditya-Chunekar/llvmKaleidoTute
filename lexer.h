@@ -1,5 +1,5 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <string>
 using namespace std;
 /// Definitions
 enum Token
@@ -14,8 +14,8 @@ enum Token
     tok_ident=-4,
     tok_num=-5,
 };
-extern static string identStr;
-extern static double numVal;
+static string identStr;
+static double numVal;
 
 /// getTok() - return next tok from std ip
 static int getTok()
@@ -54,7 +54,7 @@ static int getTok()
         do
         lastCh=getchar();
         while (lastCh!=EOF && lastCh!='\n' && lastCh!='\r');
-        if (lastCh!=EOF) return gettok();
+        if (lastCh!=EOF) return getTok();
     }
 
     if(lastCh==EOF) return tok_eof;
