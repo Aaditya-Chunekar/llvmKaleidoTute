@@ -195,7 +195,7 @@ static unique_ptr<exprAST> parseBinOpRHS(int exprPrec, unique_ptr<exprAST> LHS)
         LHS=make_unique<binExprAST>(binOp, move(LHS), move(RHS));
     }
 }
-static std::unique_ptr<ExprAST> ParseExpression() {
+static std::unique_ptr<ExprAST> ParseExpr() {
   auto LHS = ParsePrimary();
   if (!LHS)
     return nullptr;
