@@ -9,6 +9,9 @@ class exprAST
 {
     public:
         virtual ~exprAST()=default;
+        virtual value *codegen()=0;
+        // “Value” is the class used to represent a “Static Single Assignment (SSA) register” or “SSA value” in LLVM.
+
         //understanding virtual and default
 };
 /* numExprAST class captures the numeric value of the literal as an instance variable. 
@@ -19,6 +22,7 @@ class numExprAST : public exprAST
     public:
         numExprAST(double val) : val(val) {}
         //what does above line do?
+        value *codegen() override;
 };
 
 class varExprAST : public exprAST 
@@ -26,6 +30,7 @@ class varExprAST : public exprAST
     string name;
     public:
         varExprAST(const string &name) : name(name) {}
+        value *codegen() override;
 };
 
 class binExprAST : public exprAST
@@ -41,7 +46,7 @@ class binExprAST : public exprAST
             unique_ptr<exprAST> LHS,
             unique_ptr<exprAST> RHS
         ) : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
-        //
+        value *codegen() override;
         //what does move do?
 };
 
@@ -55,6 +60,7 @@ class callExprAST : public exprAST
             const string &callee,
             vector<unique_ptr<exprAST>> args
         ) : callee(callee), args(move(args)) {}
+        value *codegen() override;
 };
 
 class protoAST
@@ -64,6 +70,8 @@ class protoAST
     public:
         protoAST (const string &name, vector<string> args)
             : name(name), args(move(args)) {}
+        Function *codegen();
+        //#include "llvm/IR/Function.h"
         const string &getName() const {return name;}
 };
 
@@ -74,6 +82,7 @@ class funcAST
     public:
         funcAST(unique_ptr<protoAST> proto, unique_ptr<exprAST> body)
             : proto(move(proto)), body(move(body)) {}
+        Function *codegen();
 };
 //what is make_unique?
 //todo: adding header files
