@@ -89,7 +89,19 @@ class funcAST
 //todo: connecting multiple .cpp files
 
 //parser
+static unique_ptr<LLVMContext> theContext;
+static unique_ptr<IRBuilder<>> builder;
+static unique_ptr<Module> theModule;
+// static map<string, unique_ptr<protoAST>> FunctionProtos; - copilot suggested this 
+static map<string, value *> namedValues;
 static int curTok;
+
+value *logErrorV(const char *str)
+{
+    logError(str);
+    return nullptr;
+}
+
 static int getNextToken()
 {
     return curTok=getTok();
