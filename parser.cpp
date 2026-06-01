@@ -102,6 +102,11 @@ value *logErrorV(const char *str)
     return nullptr;
 }
 
+value *numExprAST::codegen()
+{
+    return ConstantFP::get(*theContext, APFloat(val));
+}
+
 static int getNextToken()
 {
     return curTok=getTok();
