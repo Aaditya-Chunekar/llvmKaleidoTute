@@ -136,6 +136,24 @@ value binExprAST::codegen()
     }
 }
 
+value *callExprAST::codegen()
+{
+    Function *calleeF = theModule->getFunction(callee);
+    if(!calleeF) return logErrorV("Unknown function referenced");
+
+    if(calleeF->arg_size() != args.size())
+    return logErrorV("Incorrect # arguments passed");
+
+    vector<value *> argsV;
+    for(unsigned i=0, e=args.size(); i!=e; ++i)
+    {
+        value *argV = args[i]->codegen();
+        if(!argV) return nullptr;
+        argsV.push_back(argV);
+    }
+    return builder->CreateCall(calleeF, argsV, "calltmp");
+}   
+
 static int getNextToken()
 {
     return curTok=getTok();
