@@ -107,6 +107,13 @@ value *numExprAST::codegen()
     return ConstantFP::get(*theContext, APFloat(val));
 }
 
+value *varExprAST::codegen()
+{
+    value *v = namedValues[name];
+    if(!v) logErrorV("Unknown variable name");
+    return v;
+}
+
 static int getNextToken()
 {
     return curTok=getTok();
