@@ -114,6 +114,28 @@ value *varExprAST::codegen()
     return v;
 }
 
+value binExprAST::codegen()
+{
+    value *L = LHS->codegen();
+    value *R = RHS->codegen();
+    if(!L || !R) return nullptr;
+
+    switch(op)
+    {
+        case '+':
+            return builder->CreateFAdd(L,R,"addtmp");
+        case '-':
+            return builder->CreateFSub(L,R,"subtmp");
+        case '*':
+            return builder->CreateFMul(L,R,"multmp");
+        case '<':
+            L = builder->CreateFCmpULT(L,R,"cmptmp");
+            return builder->CreateUIToFP(L, Type::getDoubleTy(*theContext), "booltmp");
+        default:
+            return logErrorV("invalid binary operator");
+    }
+}
+
 static int getNextToken()
 {
     return curTok=getTok();
