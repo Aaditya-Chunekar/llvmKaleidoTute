@@ -154,6 +154,19 @@ value *callExprAST::codegen()
     return builder->CreateCall(calleeF, argsV, "calltmp");
 }   
 
+Function *protoAST::codegen()
+{
+    vector<Type *> Doubles(args.size(), Type::getDoubleTy(*theContext));
+    FunctionType *FT = FunctionType::get(Type::getDoubleTy(*theContext), Doubles, false);
+    Function *F = Function::Create(FT, Function::ExternalLinkage, name, theModule.get());
+
+    unsigned idx = 0;
+    for(auto &arg : F->args())
+    arg.setName(args[idx++]);
+
+    return F;
+}
+
 static int getNextToken()
 {
     return curTok=getTok();
