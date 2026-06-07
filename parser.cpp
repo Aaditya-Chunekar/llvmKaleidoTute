@@ -167,6 +167,34 @@ Function *protoAST::codegen()
     return F;
 }
 
+Function *funcAST::codegen()
+{
+    Function *theFunction = theModule->getFunction(proto->getName());
+    if(!theFunction)
+    theFunction = proto->codegen();
+
+    if(!theFunction) return nullptr;
+
+    if(!theFunction->empty())
+    return (Function *)logErrorV("Function cannot be redefined");
+
+    BasicBlock *BB = BasicBlock::Create(*theContext, "entry", theFunction);
+    builder->SetInsertPoint(BB);
+
+    namedValues.clear();
+    for(auto &arg : theFunction->args())
+    namedValues[string(arg.getName())] = &arg;
+
+    if(value *retVal = body->codegen())
+    {
+        builder->CreateRet(retVal);
+        verifyFunction(*theFunction);
+        return theFunction;
+    }
+    theFunction->eraseFromParent();
+    return nullptr;
+}
+
 static int getNextToken()
 {
     return curTok=getTok();
